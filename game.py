@@ -32,8 +32,7 @@ class AlienInvasion:
             self.ship.update()
             self._update_bullets()
             self._update_screen()
-            # Make the most recently drawn screen visible.
-            pygame.display.flip()
+
 
     def _update_bullets(self):
         """Update position of bullets and get rid of old bullets."""
@@ -91,6 +90,7 @@ class AlienInvasion:
         self.ship.blitme()
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
+        pygame.display.flip()
 
 
 if __name__ == '__main__':
