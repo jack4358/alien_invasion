@@ -1,5 +1,5 @@
 import sys
-
+from pygame.sprite import Sprite
 import pygame
 
 class AlienInvasion:
@@ -10,15 +10,17 @@ class AlienInvasion:
         pygame.init()
         self.settings = Settings()
 
-        self.screen = pygame.display.set_mode((0, 0),pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Alien Invasion")
 
         self.ship = Ship(self)
+        self.bullets = pygame.sprite.Group()
 
         #Set the background color.
         self.bg_color = (230, 230, 230)
+        self.screen_rect = self.screen.get_rect()
 
     def run_game(self):
         """Start the main loop for the game."""
@@ -26,6 +28,7 @@ class AlienInvasion:
             # Watch for keyboard and mouse events.
             self._check_events()
             self.ship.update()
+            self._update_bullets()
             self._update_screen()
 
     def _check_events(self):
@@ -46,6 +49,8 @@ class AlienInvasion:
             self.ship.moving_down = True
         elif event.key == pygame.K_q:
             sys.exit()
+        elif event.key == pygame.K_SPACE:
+            self._fire_bullet()
 
     def _check_keyup_events(self, event):
         """Respond to key releases."""
@@ -62,6 +67,22 @@ class AlienInvasion:
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         pygame.display.flip()
+
+    def _update_bullets(self):
+        """Update position of bullets and get rid of old bullets."""
+        # Update bullet positions.
+        self.bullets.update()
+
+            # Get rid of bullets that have disappeared.
+        for bullet in self.bullets.copy():
+            if bullet.rect.left > self.screen_rect.right:
+                self.bullets.remove(bullet)
+        print(len(self.bullets))
+    def _fire_bullet(self):
+        """Create a new bullet and add it to the bullets group."""
+        if len(self.bullets) < self.settings.bullets_allowed:
+            new_bullet = Bullet(self)
+            self.bullets.add(new_bullet)
 
 
 
@@ -95,7 +116,6 @@ class Ship:
         if self.moving_down and self.rect.bottom < self.screen_rect.bottom:
             self.y += self.settings.ship_speed
 
-
         # Update rect object from self.y.
         self.rect.y = self.y
 
@@ -107,7 +127,6 @@ class Ship:
 
 class Settings:
     """A class to store all settings for Alien Invasion"""
-
     def __init__(self):
         """Initialize the game's settings."""
         # Screen settings
@@ -118,6 +137,17 @@ class Settings:
         # Ship settings
         self.ship_speed = 1.5
 
+        # Bullet settings
+        self.bullet_speed = 1.0
+        self.bullet_width = 15
+        self.bullet_height = 3
+        self.bullet_color = (60, 60, 60)
+        self.bullets_allowed = 3
+
+
+
+
+
 class Bullet(Sprite):
     """A class to manage bullets fired from teh ship."""
 
@@ -126,11 +156,11 @@ class Bullet(Sprite):
         super().__init__()
         self.screen = ai_game.screen
         self.settings = ai_game.settings
-        self.color - self.settings.bullet_color
+        self.color = self.settings.bullet_color
 
         # Create a bullet rect at (0, 0) and then set correct position.
         self.rect = pygame.Rect(0, 0, self.settings.bullet_width, self.settings.bullet_height)
-        self.rect.midtop = ai_game.ship.rect.midtop
+        self.rect.midright = ai_game.ship.rect.midright
 
         # Store the bullet's position as a decimal value.
         self.x = float(self.rect.x)
@@ -138,7 +168,7 @@ class Bullet(Sprite):
     def update(self):
         """Move the bullet up the screen."""
         # Update the decimal position of the bullet.
-        self.x -= self.settings.bullet_speed
+        self.x += self.settings.bullet_speed
         # Update the rect position.
         self.rect.x = self.x
 
@@ -147,11 +177,11 @@ class Bullet(Sprite):
         pygame.draw.rect(self.screen, self.color, self.rect)
 
 
-    def _fire_bullet(self):
-        """Create a new bullet and add it to the bullets group."""
-        if len(self.bullets) < self.settings.bullets_allowed:
-            new_bullet = Bullet(self)
-            self.bullets.add(new_bullet)
+
+
+
+
+
 
 
 
