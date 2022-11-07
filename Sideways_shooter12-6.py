@@ -78,6 +78,7 @@ class AlienInvasion:
             if bullet.rect.left > self.screen_rect.right:
                 self.bullets.remove(bullet)
         print(len(self.bullets))
+
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullets group."""
         if len(self.bullets) < self.settings.bullets_allowed:
