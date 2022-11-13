@@ -2,6 +2,7 @@ import sys
 from pygame.sprite import Sprite
 import pygame
 
+
 class AlienInvasion:
     """Overall class to manage game assets and behavior."""
 
@@ -146,9 +147,6 @@ class Settings:
         self.bullets_allowed = 3
 
 
-
-
-
 class Bullet(Sprite):
     """A class to manage bullets fired from teh ship."""
 
@@ -176,14 +174,6 @@ class Bullet(Sprite):
     def draw_bullet(self):
         """Draw the bullet to the screen."""
         pygame.draw.rect(self.screen, self.color, self.rect)
-
-
-
-
-
-
-
-
 
 
 if __name__ == '__main__':
