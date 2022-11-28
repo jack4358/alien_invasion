@@ -30,7 +30,7 @@ class AlienInvasion:
 
         self._create_fleet()
 
-        #Set the background color.
+        # Set the background color.
         self.bg_color = (230, 230, 230)
 
     def run_game(self):
@@ -56,13 +56,13 @@ class AlienInvasion:
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
-        #print(len(self.bullets))
+        # print(len(self.bullets))
 
         self._check_bullet_alien_collisions()
 
     def _check_bullet_alien_collisions(self):
         """Respond to bullet-alien collisions."""
-        #Remove any bullets and aliens that have collided.
+        # Remove any bullets and aliens that have collided.
         collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
 
         if not self.aliens:
@@ -111,7 +111,7 @@ class AlienInvasion:
     def _create_fleet(self):
         """Create a fleet of aliens."""
         # Create an alien and find the number of aliens in a row.
-        #Spacing between each alien is equal to one alien width.
+        # Spacing between each alien is equal to one alien width.
         alien = Alien(self)
         alien_width, alien_height = alien.rect.size
         available_space_x = self.settings.screen_width - (2 * alien_width)
@@ -204,7 +204,7 @@ class AlienInvasion:
 
 
 if __name__ == '__main__':
-    #Make a game instance, and run the game.
+    # Make a game instance, and run the game.
     ai = AlienInvasion()
     ai.run_game()
 
